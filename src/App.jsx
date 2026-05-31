@@ -119,6 +119,7 @@ const LI={beginner:0,intermediate:1,rx:2,elite:3};
 const LEVELS={beginner:{l:"Beginner",d:"Débutant, formes à apprendre"},intermediate:{l:"Intermediate",d:"1–2 ans de CrossFit"},rx:{l:"RX",d:"Rx complet, bonne technique"},elite:{l:"Elite",d:"Compétition, full charge"}};
 const MUSCLES=["Tout le corps","Haut du corps","Bas du corps","Core / Abs","Postérieure","Épaules / Bras"];
 const WOD_TYPES=["AMRAP","EMOM","For Time","Tabata","Chipper"];
+const WOD_TYPES_RANDOM="🎲 Aléatoire";
 const SK="wod_history_v4",RK="wod_1rm_v2",PK="wod_prefs_v3",TK="wod_theme_v1";
 
 const pick=(arr,n)=>{const c=[...arr],o=[];while(o.length<n&&c.length){const i=Math.floor(Math.random()*c.length);o.push(c.splice(i,1)[0]);}return o;};
@@ -361,7 +362,8 @@ export default function App(){
     if(!muscles.length)return;
     setLoading(true);
     setTimeout(()=>{
-      const w=generateAlgo({level,muscles,wodType,forceRatio,cardioRatio,duration,oneRMs});
+      const resolvedType=wodType==="random"?WOD_TYPES[Math.floor(Math.random()*WOD_TYPES.length)]:wodType;
+      const w=generateAlgo({level,muscles,wodType:resolvedType,forceRatio,cardioRatio,duration,oneRMs});
       w._id=Date.now();w._date=new Date().toISOString();w._level=level;
       w._muscles=muscles;w._force=forceRatio;w._cardio=cardioRatio;w._score="";
       setWod(w);setScoreInput("");setTab("wod");setLoading(false);
@@ -410,8 +412,10 @@ export default function App(){
       </div>
       <p className="sl">Type de WOD</p>
       <div className="chips">
+        <button className={`chip coral ${wodType==="random"?"on":""}`} onClick={()=>setWodType("random")}>🎲 Aléatoire</button>
         {WOD_TYPES.map(t=><button key={t} className={`chip coral ${wodType===t?"on":""}`} onClick={()=>setWodType(t)}>{t}</button>)}
       </div>
+      {wodType==="random" && <div style={{fontSize:11,color:T.txs,marginTop:-2,marginBottom:4}}>Un type sera choisi aléatoirement à la génération</div>}
       <p className="sl">Paramètres</p>
       <div className="card">
         <div className="slider-row"><label>Force</label><input type="range" min={0} max={100} step={10} value={forceRatio} onChange={e=>setForceRatio(+e.target.value)}/><span className="sv">{forceRatio}%</span></div>
