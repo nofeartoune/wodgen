@@ -209,7 +209,7 @@ const makeCSS=T=>`
 html,body,#root{height:100%;background:${T.bg};color:${T.tx};font-family:'DM Sans',sans-serif;transition:background .25s,color .25s}
 ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:${T.brd};border-radius:2px}
 .app{display:flex;flex-direction:column;height:100dvh;max-width:430px;margin:0 auto;overflow:hidden;position:relative;background:${T.bg}}
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 20px 10px;flex-shrink:0}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:max(16px, env(safe-area-inset-top)) 20px 10px;flex-shrink:0}
 .logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;color:${T.acc}}
 .logo span{color:${T.txs}}
 .topbar-right{display:flex;align-items:center;gap:8px}
